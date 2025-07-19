@@ -81,9 +81,11 @@ class Plane: public hittable{
                   int iu = floor(u);
                   int iv = floor(v);
                   if((iu+iv)%2 == 0){
-                           return albedo*0.4;
+                    // return Vec4(0,0.5,0,1); // temp color
+                    return albedo*0.4;
                              
                   }
+               //    return Vec4(1,1,1,1); // temp color
                   return albedo;
                   /*
                   if(pattern.pattern_enabled==true){

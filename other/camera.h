@@ -54,7 +54,7 @@ class camera{
                      //default values
                      name = _name;
                      aspect_ratio = 16/9;
-                     img_width = 900; 
+                     img_width = 700; 
                      std::cout<<"default img width: "<<img_width<<std::endl;                  
                      position = Vec4(0,0,8,Vec4::point);
                      lookat_point = Vec4(0,0,0,Vec4::point);
@@ -70,7 +70,8 @@ class camera{
      private:
             Vec4 returnColor(std::vector<intersection> hits ,ray r,std::vector<hittable*> scene, int remaining);
             Vec4 reflected_color(std::vector<hittable*> scene, Computations comps, int remaining);
-            Vec4 shadepixel(Computations comps, ray r, std::vector<hittable*> scene, pointLight light, int remaining);         
+            Vec4 shadepixel(Computations comps, ray r, std::vector<hittable*> scene, pointLight light, int remaining);   
+            Vec4 gammaCorrection(Vec4 color);      
             void get_hits(ray r, hittable* s , std::vector<intersection>& hits);
             static bool compare_intersections(const intersection& a, const intersection& b);
             int get_hit_index(std::vector<intersection> hits);

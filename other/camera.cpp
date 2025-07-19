@@ -2,6 +2,7 @@
 
 void camera::initialize(){
      
+     // something is wrong with aspect ratio code, ill fix it later
      img_height = img_width;//int(img_width/aspect_ratio);  
      vp_width = vp_height * (float(img_width)/img_height);
      
@@ -23,12 +24,8 @@ void camera::initialize(){
      delta_u = vp_u/float(img_width);
      delta_v = vp_v/float(img_height);
      vp_upperleft = position - (vp_u/2) - (vp_v/2) + (forward_vec*focal_length);
-     //forward_vec.toString();
-     //vp_u.toString();
-     //vp_v.toString();
      //std::cout<<"upper left pixel coords: "<<vp_upperleft.x<<" "<<vp_upperleft.y<<" "<<vp_upperleft.z<<std::endl;
-     
-     
+
 }
 
 //code starts here called by the main function
@@ -49,23 +46,25 @@ void camera::render(std::vector<hittable*> scene, const char* filePath){
      for(int i=0; i<img_height; i++){
              for(int j=0; j<img_width; j++){
                                                
-                     Vec4 current_pixel = vp_upperleft + (delta_u * j) + (delta_v * i);                     
-                     Vec4 dir = current_pixel-position;                  
-                     dir.normalize();
+                    Vec4 current_pixel = vp_upperleft + (delta_u * j) + (delta_v * i);                     
+                    Vec4 dir = current_pixel-position;                  
+                    dir.normalize();
                      
-                     ray r(position, dir);
+                    ray r(position, dir);
                       
-                     std::vector<intersection> hits;
-                     for(int k=0; k<scene.size(); k++){//scene loop 
-                             get_hits(r, scene[k], hits);
-                     }
+                    std::vector<intersection> hits;
+                    for(int k=0; k<scene.size(); k++){//scene loop 
+                         get_hits(r, scene[k], hits);
+                    }
                      
-                     Vec4 pixel_color = returnColor(hits, r, scene, 5);
-                     pixel_color = clamp_color(pixel_color);
-                     pixel_color = convert_to_255(pixel_color); // converts to 0-255 values
+                    Vec4 pixel_color = returnColor(hits, r, scene, 5);
+
+                    pixel_color = gammaCorrection(pixel_color); // gamma correction
+                    pixel_color = clamp_color(pixel_color);     // clamps the color to 0-1
+                    pixel_color = convert_to_255(pixel_color); // converts to 0-255 values
                      
-                     Imagefile<<pixel_color.x<<" "<<pixel_color.y<<" "<<pixel_color.z<<endl;
-                     current++;       
+                    Imagefile<<pixel_color.x<<" "<<pixel_color.y<<" "<<pixel_color.z<<endl;
+                    current++;       
              }
              std::cout<<current<<" pixels rendered out of "<<total_itr<<std::endl;
      }
@@ -73,17 +72,27 @@ void camera::render(std::vector<hittable*> scene, const char* filePath){
      //delete[] background_image;
       
 }
+Vec4 camera::gammaCorrection(Vec4 color){
+     float gamma = 2.2f;
+     float invGamma = 1.0f / gamma;
+
+     color.x = pow(color.x, invGamma);
+     color.y = pow(color.y, invGamma);
+     color.z = pow(color.z, invGamma);
+     color.w = 1.0f; 
+     return color;
+}
 
 
 Vec4 camera::returnColor(std::vector<intersection> hits ,ray r,std::vector<hittable*> scene ,int remaining){
       
       Vec4 skyblue = convert_to_01(Vec4(135,206,235,1)); // skyblue color     
-      Vec4 background_color = skyblue; //Vec4(0,0,0,1); 
+      Vec4 background_color = skyblue;  
        
       if(hits.size() == 0){
-            //NOTE!! if changing also chage int the last else block for it to work
-           // return getBackgroundColor(r, background_image, background_img_width, background_img_height);
-            return background_color;           
+            //NOTE!! if changing to backgroundimage, also chage the last else block for it to work
+          // return getBackgroundColor(r, background_image, background_img_width, background_img_height);
+          return background_color;           
       }
       else{
            std::sort(hits.begin(), hits.end(), compare_intersections);
@@ -91,14 +100,14 @@ Vec4 camera::returnColor(std::vector<intersection> hits ,ray r,std::vector<hitta
            
            if(hit_index >= 0){    
                                           
-                pointLight light(Vec4(-5,10,10,Vec4::point), Vec4(1,1,1,1));
+                pointLight light(Vec4(40,100,100,Vec4::point), Vec4(1,1,1,1));
                 Computations comps = prepare_computations(hits[hit_index], r, hits);
                 
                 return shadepixel(comps, r, scene, light, remaining);
            }
            else{
                // return getBackgroundColor(r, background_image, background_img_width, background_img_height);
-                return background_color; 
+               return background_color; 
            }
       }
       

@@ -31,5 +31,10 @@ Vec4 convert_to_01(const Vec4& color){
       return Vec4(color.x/255,color.y/255,color.z/255,1);
 }
 Vec4 clamp_color(Vec4 color){      
-      return Vec4(std::min(color.x, 1.0f), std::min(color.y, 1.0f), std::min(color.z, 1.0f), 1);
+      return Vec4(
+      std::clamp(color.x, 0.0f, 1.0f),
+      std::clamp(color.y, 0.0f, 1.0f),
+      std::clamp(color.z, 0.0f, 1.0f),
+      1.0f
+      );
 }

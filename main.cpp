@@ -99,53 +99,83 @@ void practice(){
     // pumpkin->update_transformation(Vec4(5,-1,-1,Vec4::point));
     // pumpkin->divide_model(10);
 
-    // hittable* cow = ParseOBJ("models/simple/cow.obj" ,1 ,true);
-    // cow->update_transformation(Vec4(4,-0.65,4,Vec4::point));
-    // cow->set_albedo(Vec4(0.8,1,1,1));
+    hittable* cow = ParseOBJ("models/simple/cow.obj" ,1 ,true);
+    cow->update_transformation(Vec4(4,-0.65,4,Vec4::point));
+    cow->update_transformation(Vec4(-14,0.2,-15,Vec4::point));
+    cow->set_albedo(Vec4(0.8,0.2,0.6,1));
+    // ----------------------------------------------------------------
+        // Iron
+        // cow->set_material(Material(0.1,0.1,1.0,64.0,0.9));
+        // cow->set_albedo(Vec4(0.56,0.57,0.58,1));
+    // ----------------------------------------------------------------
+    
     // //silver
     // cow->set_material(Material(0.19,0.50,0.50,51.2,0.6,0,1));
     // cow->set_albedo(Vec4(0.4,0.4,0.4,1));
     // //glass
     // //cow->set_albedo(Vec4(0,0,0,1));
     // //cow->set_material(Material(0.1,0.2,0.9,300.0,1,1,1.5));
-    // cow->divide_model(8);
+    cow->divide_model(8);
 
-    // hittable* teddy = ParseOBJ("models/simple/teddy.obj",0.25,false);
-    // teddy->update_transformation(Vec4(-4,1,-2,Vec4::point));
+    hittable* teddy = ParseOBJ("models/simple/teddy.obj",0.25,false);
+    teddy->update_transformation(Vec4(-4,1,-2,Vec4::point));
+    // ----------------------------------------------------------------
+        // Iron
+        teddy->set_material(Material(0.1,0.1,1.0,64.0,0.9,0,1));
+        teddy->set_albedo(Vec4(0.56,0.57,0.58,1));
+    // ----------------------------------------------------------------
     // //teddy->set_material(Material(0.19,0.50,0.50,51.2,0.9,0,1));
     // teddy->set_albedo(Vec4(0.97,0.96,0.91,1));
-    // teddy->divide_model(6);
+    teddy->divide_model(6);
 
-    // hittable* teapot = ParseOBJ("models/simple/teapot.obj",1.9,true);
-    // teapot->update_transformation(Vec4(1,-3.7,0,Vec4::point));
+    hittable* teapot = ParseOBJ("models/simple/teapot.obj",1.9,true);
+    // teapot->update_transformation(Vec4(1,-3.7,-2,Vec4::point));
+    teapot->update_transformation(Vec4(3,-3.7,-10,Vec4::point));
+    // ----------------------------------------------------------------
+        // Iron
+        // teapot->set_material(Material(0.1,0.1,1.0,64.0,0.9,0,1));
+        // teapot->set_albedo(Vec4(0.56,0.57,0.58,1));
+    // ----------------------------------------------------------------
     // teapot->set_material(Material(0.19,0.50,0.50,51.2,0.6,0,1));
-    // teapot->set_albedo(Vec4(0.4,0.4,0.4,1));
+    teapot->set_albedo(Vec4(0.7,0.8,0.2,1));
 
     // // material properties as the glass in book cover image
     // // teapot->set_albedo(Vec4(0.373,0.404,0.550,1));
     // // teapot->set_material(Material(0,0.2,1.0,200.0,0.7,0.7,1.5));
-    // teapot->divide_model(10);
+    teapot->divide_model(10);
 
     hittable* dragon = ParseOBJ("models/dragon/dragon.obj" ,1.7 ,true);
     // dragon->update_transformation(Vec4(3.2,-2,-1,1));
-    dragon->update_transformation(Vec4(3.2,-3.5,2,1)); //save
-    dragon->set_material(Material(0.19,0.50,0.50,51.2,0.6,0,1));
-    dragon->set_albedo(Vec4(0.4,0.4,0.4,1));
-    // dragon->set_albedo(Vec4(0.2,0.8,0.7,1)); //really cool colour
+    dragon->update_transformation(Vec4(3,-3.5,2,1)); //save
+    dragon->set_albedo(Vec4(0.2,0.8,0.7,1)); //really cool colour
+     // ----------------------------------------------------------------
+        // Iron
+        // dragon->set_material(Material(0.02, 0.1, 0.9, 150.0, 0.7));
+        // dragon->set_albedo(Vec4(0.1, 0.1, 0.12,1));
+        // Custom
+        // dragon->set_material(Material(0.1,0.6,0.3,15.0,0));
+        // dragon->set_albedo(Vec4(1,0,0.1,1));
+    // ----------------------------------------------------------------
+    // dragon->set_material(Material(0.19,0.50,0.50,51.2,0.6,0,1));
+    // dragon->set_albedo(Vec4(0.4,0.4,0.4,1));
+    
     dragon->divide_model(15);
 
     // hittable* tree = ParseOBJ("extra_models/low_poly_tree/Lowpoly_tree_sample.obj",0.3,false);
     // tree->update_transformation(Vec4(3.2,0,2,1));
     // tree->divide_model(5);
 
-    hittable* cube1 = new cube(Vec4(-5,-1,1,1), Vec4(5,4,-1,1));
+    hittable* matte_sphere = new sphere(Vec4(1,-2,7,Vec4::point),1.3);
+    matte_sphere->set_albedo(Vec4(0.3,0.05,0.05,1));
+    matte_sphere->set_material(Material(0.1,0.7,0.1,10.0,0));
+
 
     std::vector<hittable*> scene;
-    // scene.push_back(cube1);
-    // scene.push_back(teapot);
+    // scene.push_back(matte_sphere);
+    scene.push_back(teapot);
     // scene.push_back(teddy);
     // scene.push_back(pumpkin);
-    // scene.push_back(cow); 
+    scene.push_back(cow); 
     scene.push_back(dragon);
     // scene.push_back(tree);
     // scene.push_back(triad);
@@ -154,8 +184,8 @@ void practice(){
     // scene.push_back(copper);
     // scene.push_back(s7);
     scene.push_back(ground);
-    scene.push_back(wall1);
-    scene.push_back(wall2);
+    // scene.push_back(wall1);
+    // scene.push_back(wall2);
     
     
     
@@ -167,7 +197,7 @@ void practice(){
     std::clock_t start_time = std::clock();
     //--------------------background image loading code ------------------------------------------------------------------
     int background_width,background_height;
-    //Vec4* background_image = load_ppm("other/nature1.ppm", background_width, background_height);
+    // Vec4* background_image = load_ppm("other/Neighbourhood.ppm", background_width, background_height);
     //cout<<background_width<<","<<background_height<<endl;
     //--------------------------------------------------------------------------------------------------------------------
     std::clock_t end_time = std::clock();
@@ -180,11 +210,11 @@ void practice(){
     
     //--------------------render ------------------------------------------------------------------
     camera cam1("camera1");
-    //cam1.background_image = background_image;
+    // cam1.background_image = background_image;
     cam1.background_img_width = background_width;
     cam1.background_img_height = background_height;
-    //cam1.set_position(Vec4(14,3,20,Vec4::point), Vec4(2,0,0,Vec4::point));
-    cam1.set_position(Vec4(10,8,20,Vec4::point), Vec4(2,0,0,Vec4::point));
+    //cam1.set_position(Vec4(10,8,20,Vec4::point), Vec4(2,0,0,Vec4::point));
+    cam1.set_position(Vec4(10,14,20,Vec4::point), Vec4(2,0,0,Vec4::point));
     start_time = std::clock();
     cam1.render(scene,"output/camera1.ppm");
     //--------------------------------------------------------------------------------------------------------------------
